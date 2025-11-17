@@ -1,0 +1,20 @@
+{
+  "name": "wirelab-contact-cdk",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "cdk:synth": "cdk synth",
+    "cdk:deploy": "cdk deploy"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.151.0",
+    "constructs": "^10.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "aws-cdk": "^2.1031.2",
+    "esbuild": "^0.27.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}

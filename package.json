@@ -1,0 +1,29 @@
+{
+  "name": "wirelab-challenge",
+  "private": true,
+  "workspaces": [
+    "apps/frontend",
+    "apps/dashboard",
+    "apps/backend",
+    "packages/shared",
+    "infra/cdk"
+  ],
+  "scripts": {
+    "build": "npm run build -w packages/shared && npm run build -w apps/backend && npm run build -w apps/frontend && npm run build -w apps/dashboard",
+    "dev:frontend": "npm run dev -w apps/frontend",
+    "dev:dashboard": "npm run dev -w apps/dashboard",
+    "cdk:synth": "npm run cdk:synth -w infra/cdk",
+    "cdk:deploy": "npm run cdk:deploy -w infra/cdk",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^24.10.1",
+    "@vitejs/plugin-react": "^5.1.1",
+    "@vitest/coverage-v8": "^4.0.9",
+    "jsdom": "^27.2.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.9"
+  }
+}
