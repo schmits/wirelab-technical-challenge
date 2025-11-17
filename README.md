@@ -210,7 +210,7 @@ For local development, a **mock server** replicates the handler logic using Node
 #### 2. Dashboard App (`apps/dashboard`, port 3001)
 
 - Separate Next.js App Router application
-- Consumes `GET /meta` from the same backend
+- Consumes `GET /dashboard` from the same backend
 - Renders simple “cards”:
     - total submissions (mocked)
     - last example message (mock data)
