@@ -9,6 +9,8 @@
 This repository contains a small but complete **cloud-native web application architecture**, implemented as a **monorepo**.  
 It is built with the technologies requested in the challenge:
 
+The local development flow runs entirely with the included mock backend, so AWS credentials are only needed for CDK synthesis or deployment.
+
 - **Frontend:** Next.js (App Router), TypeScript, Tailwind CSS
 - **Backend:** AWS Lambda-style handler in TypeScript
 - **Infrastructure:** AWS CDK (TypeScript) defining at least one Lambda resource
