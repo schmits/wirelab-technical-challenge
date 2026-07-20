@@ -9,7 +9,13 @@ const env = {
   region: process.env.CDK_DEFAULT_REGION ?? "eu-west-1",
 };
 
+const frontendOrigins = process.env.FRONTEND_ORIGINS
+  ?.split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 new WirelabContactApiStack(app, "WirelabContactApiStack", {
   env,
   frontendOrigin: process.env.FRONTEND_ORIGIN,
+  frontendOrigins,
 });
