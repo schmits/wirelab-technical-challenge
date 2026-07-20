@@ -83,7 +83,7 @@ npm run dev -w apps/frontend
 
 Available at:
 
-- http://localhost:3000
+- http://localhost:3000/contact
 
 Required environment variable for the frontend (`apps/frontend/.env.local`):
 
@@ -99,7 +99,7 @@ npm run dev -w apps/dashboard
 
 Available at:
 
-- http://localhost:3001
+- http://localhost:3001/dashboard
 
 Required environment variable (`apps/dashboard/.env.local`):
 
@@ -117,6 +117,12 @@ Allowed origins for backend (mock + Lambda):
 
 - http://localhost:3000
 - http://localhost:3001
+
+Allowed methods:
+
+- `GET`
+- `POST`
+- `OPTIONS`
 
 The backend inspects the incoming `Origin` header and reflects it back in:
 
@@ -179,6 +185,7 @@ The backend is designed as a small serverless API with two endpoints:
 Implementation details:
 
 - Lambda-style handler (`handler.ts`) in TypeScript
+- Supports Lambda Function URL/API Gateway v2 events and legacy API Gateway v1-style events
 - Uses the shared `ContactSchema` to validate incoming POST bodies
 - Logs useful metadata (e.g. message length, timestamp) for observability
 - Returns JSON responses with appropriate status codes and CORS headers
@@ -231,7 +238,8 @@ The AWS CDK stack (`WirelabContactApiStack`) defines:
     - Memory and timeout tuned for this use case
 - **Function URL**:
     - Public endpoint for the Lambda
-    - CORS configured for the frontend origins
+    - CORS configured for both frontend origins by default
+    - Supports `GET`, `POST`, and `OPTIONS`
 - **Tags**:
     - `owner`: `rian-schmits`
     - `project`: `wirelab-contact-poc`
@@ -267,6 +275,21 @@ A few deliberate choices:
 ## 📄 Deployment
 
 If AWS credentials and environment are available, the CDK stack can be synthesized and deployed.
+
+### Configure frontend origins
+
+By default, the CDK stack allows:
+
+- `http://localhost:3000`
+- `http://localhost:3001`
+
+For custom deployments, provide a comma-separated list:
+
+```bash
+FRONTEND_ORIGINS="https://contact.example.com,https://dashboard.example.com" npm run cdk:deploy -w infra/cdk
+```
+
+The legacy single-origin `FRONTEND_ORIGIN` environment variable is still supported.
 
 ### Synthesize the stack
 
