@@ -12,6 +12,7 @@ import * as path from "path";
 
 export interface WirelabContactApiStackProps extends StackProps {
   frontendOrigin?: string;
+  frontendOrigins?: string[];
 }
 
 export class WirelabContactApiStack extends Stack {
@@ -20,7 +21,11 @@ export class WirelabContactApiStack extends Stack {
   constructor(scope: Construct, id: string, props?: WirelabContactApiStackProps) {
     super(scope, id, props);
 
-    const frontendOrigin = props?.frontendOrigin ?? "http://localhost:3000";
+    const frontendOrigins = props?.frontendOrigins ??
+      (props?.frontendOrigin ? [props.frontendOrigin] : [
+        "http://localhost:3000",
+        "http://localhost:3001",
+      ]);
 
     const contactHandler = new NodejsFunction(this, "ContactHandlerFunction", {
       runtime: lambda.Runtime.NODEJS_20_X,
@@ -36,14 +41,18 @@ export class WirelabContactApiStack extends Stack {
       environment: {
         NODE_ENV: "production",
       },
-      description: "Handles dashboard form submissions for the Wirelab technical challenge",
+      description: "Handles contact form submissions and dashboard metadata for the Wirelab technical challenge",
     });
 
     const url = contactHandler.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,
       cors: {
-        allowedOrigins: [frontendOrigin],
-        allowedMethods: [lambda.HttpMethod.POST, lambda.HttpMethod.OPTIONS],
+        allowedOrigins: frontendOrigins,
+        allowedMethods: [
+          lambda.HttpMethod.GET,
+          lambda.HttpMethod.POST,
+          lambda.HttpMethod.OPTIONS,
+        ],
         allowedHeaders: ["content-type"],
       },
     });
@@ -52,11 +61,11 @@ export class WirelabContactApiStack extends Stack {
 
     new CfnOutput(this, "ContactFunctionUrl", {
       value: url.url,
-      description: "Public URL for the dashboard Lambda function",
+      description: "Public URL for the contact API Lambda function",
       exportName: "WirelabContactFunctionUrl",
     });
 
-    Tags.of(this).add("project", "wirelab-dashboard-poc");
+    Tags.of(this).add("project", "wirelab-contact-poc");
     Tags.of(this).add("owner", "rian-schmits");
   }
 }
