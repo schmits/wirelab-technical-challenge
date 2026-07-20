@@ -14,6 +14,10 @@ type RequestInfo = {
   path: string;
 };
 
+function isFunctionUrlEvent(event: SupportedEvent): event is APIGatewayProxyEventV2 {
+  return "rawPath" in event && "requestContext" in event && "http" in event.requestContext;
+}
+
 function getHeader(event: SupportedEvent, name: string): string | undefined {
   const lowerName = name.toLowerCase();
   const header = Object.entries(event.headers ?? {}).find(
@@ -34,7 +38,7 @@ function getAllowedOrigin(event: SupportedEvent): string {
 }
 
 function getRequestInfo(event: SupportedEvent): RequestInfo {
-  if ("requestContext" in event && "http" in event.requestContext) {
+  if (isFunctionUrlEvent(event)) {
     return {
       method: event.requestContext.http.method,
       path: event.rawPath ?? "/",
