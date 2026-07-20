@@ -32,8 +32,7 @@ export default function DashboardPage() {
 
         const res = await fetch(`${apiBase.replace(/\/$/, "")}/dashboard`, {
           method: "GET",
-          headers: { "content-type": "application/json" },
-          cache: "no-store"
+          cache: "no-store",
         });
 
         if (!res.ok) {
